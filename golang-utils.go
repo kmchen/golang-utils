@@ -7,15 +7,19 @@ import (
 	"os"
 )
 
-// ReadByteToInt64 converts an int64 in bytes to int64 with BigEndian
-func ReadByteInt64(data []byte) (int64, error) {
-	var value int64
+// Uint64ToByte converts an uint64 to bytes array in BigEndian
+func Uint64ToByte(data uint64) []byte {
+	buf := new(bytes.Buffer)
+	binary.Write(buf, binary.BigEndian, data)
+	return buf.Bytes()
+}
+
+// ByteToUint64 converts an uint64 in bytes to int64 with BigEndian
+func ByteToUint64(data []byte) uint64 {
+	var value uint64
 	buf := bytes.NewReader(data)
-	err := binary.Read(buf, binary.BigEndian, &value)
-	if err != nil {
-		return 0, err
-	}
-	return value, err
+	binary.Read(buf, binary.BigEndian, &value)
+	return value
 }
 
 // Realn reads line by line from a bufio.Reader
