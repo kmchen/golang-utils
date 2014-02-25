@@ -22,6 +22,13 @@ func ByteToUint64(data []byte) uint64 {
 	return value
 }
 
+// RandomUint64 creates a random uint64 number
+func RandomUint64(data string) uint64 {
+	hasher := murmur3.New64()
+	hasher.Write([]byte(NewUUID()))
+	return hasher.Sum64()
+}
+
 // Realn reads line by line from a bufio.Reader
 func Readln(r *bufio.Reader) (string, error) {
 	var (

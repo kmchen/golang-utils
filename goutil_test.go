@@ -1,7 +1,6 @@
 package goutils
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -20,11 +19,12 @@ func TestTestSuite(t *testing.T) {
 func (ts *TestSuite) SetupSuite() {
 }
 
-func (ts *TestSuite) TestReadByteInt64() {
-	b := []byte{0x18, 0x2d, 0x44, 0x54, 0xfb, 0x21, 0x09, 0x40}
-	result, err := ReadByteInt64(b)
-	assert.NoError(ts.T(), err, "Binary.read int64 in bytes should not return an error, %v", err)
-	fmt.Printf("TestReadByteInt64 : Result = %d\n", result)
+// Uint64ToByte converts an uint64 to bytes array in BigEndian
+func (ts *TestSuite) TestUint64ToByte() {
+	data := uint64(1111)
+	bData := Uint64ToByte(data)
+	newData := ByteToUint64(bData)
+	assert.Equal(ts.T(), data, newData, "Uint64 to []byte conversion should not return error. [expect: %V, got %v]", data, newData)
 }
 
 //func (ts *TestSuite) TestSessionTable() {
