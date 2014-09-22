@@ -149,3 +149,30 @@ func genCode(n uint32) string {
 	}
 	return str
 }
+
+// Send sends an access code SMS message to the designated recepient
+func (s *SMS) send() error {
+	// Compose HTTP request
+	params := url.Values{}
+	params.Set("From", s.From)
+	params.Set("To", s.To)
+	params.Set("Body", s.Body)
+	postDataBytes := []byte(params.Encode())
+	postBytesReader := bytes.NewReader(postDataBytes)
+	req, _ := http.NewRequest("POST", s.Addr, postBytesReader)
+	req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+	req.SetBasicAuth(s.Sid, s.Token)
+
+	// Issue HTTP request
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return err
+	}
+
+	_, err = ioutil.ReadAll(resp.Body)
+	resp.Body.Close()
+	if err != nil {
+		return err
+	}
+	return nil
+}
